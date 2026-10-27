@@ -1,0 +1,88 @@
+SECURENET SOLUTIONS
+MULTI-BRANCH ENTERPRISE NETWORK
+
+Device: R4-INTERNET-EDGE
+Platform: Cisco 2911 Router
+Role: Simulated Internet Edge and NAT
+
+==================================================
+
+1. INTERFACES
+   ==================================================
+
+GigabitEthernet0/0
+Connection: Johannesburg Router
+IP address: 172.16.0.2/30
+NAT role: Inside
+
+GigabitEthernet0/1
+Connection: External Test Network
+IP address: 203.0.113.1/24
+NAT role: Outside
+
+External test server:
+IP address: 203.0.113.10/24
+Default gateway: 203.0.113.1
+
+==================================================
+2. NAT CONFIGURATION
+====================
+
+Standard ACL:
+Access-list 1 permits source addresses from 10.0.0.0/8.
+
+NAT overload:
+Inside source addresses are translated using the
+GigabitEthernet0/1 interface address.
+
+Inside interface:
+GigabitEthernet0/0
+
+Outside interface:
+GigabitEthernet0/1
+
+==================================================
+3. ROUTING
+==========
+
+Default route:
+Traffic not matched by a more specific route is sent
+towards the external network using GigabitEthernet0/1.
+
+==================================================
+4. TESTING STATUS
+=================
+
+Direct connectivity from R4 to the external test server
+was successful.
+
+NAT translations were observed for traffic originating
+from the Durban staff network.
+
+End-to-end external connectivity from Durban clients
+was not successful during testing and remains unresolved.
+
+```text
+VERIFICATION COMMANDS — R4 INTERNET EDGE
+
+1. Check interface status and IP addresses:
+show ip interface brief
+
+2. Check NAT configuration:
+show running-config
+
+3. Check active NAT translations:
+show ip nat translations
+
+4. Check NAT statistics:
+show ip nat statistics
+
+5. Check routing table:
+show ip route
+
+6. Test connection to the external test server:
+ping 203.0.113.10
+
+
+
+

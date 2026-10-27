@@ -1,0 +1,127 @@
+SECURENET SOLUTIONS
+MULTI-BRANCH ENTERPRISE NETWORK
+
+Device: R2-DURBAN
+Platform: Cisco 2911 Router
+Role: Durban Branch Router
+
+==================================================
+
+1. VLAN GATEWAYS AND INTERFACES
+   ==================================================
+
+GigabitEthernet0/0.110
+VLAN: 110 - DBN-STAFF
+Gateway: 10.20.10.1/24
+
+GigabitEthernet0/0.140
+VLAN: 140 - DBN-IT
+Gateway: 10.20.140.1/24
+
+GigabitEthernet0/0.160
+VLAN: 160 - DBN-GUEST
+Gateway: 10.20.160.1/24
+
+WAN connection to Johannesburg:
+Serial0/3/0: 10.255.0.2/30
+
+WAN connection to Cape Town:
+Serial0/3/1: 10.255.0.9/30
+
+==================================================
+2. DHCP CONFIGURATION
+=====================
+
+DBN-STAFF
+Network: 10.20.10.0/24
+Gateway: 10.20.10.1
+
+DBN-IT
+Network: 10.20.140.0/24
+Gateway: 10.20.140.1
+
+DBN-GUEST
+Network: 10.20.160.0/24
+Gateway: 10.20.160.1
+
+Excluded addresses:
+.1 to .9 in each configured DHCP subnet.
+
+DNS configured in DHCP pools: 8.8.8.8
+
+==================================================
+3. OSPF ROUTING
+===============
+
+OSPF Process ID: 1
+Router ID: 2.2.2.2
+Area: 0
+
+Advertised networks:
+10.20.10.0/24
+10.20.140.0/24
+10.20.160.0/24
+10.255.0.0/30
+10.255.0.8/30
+
+The default route is learned through OSPF from
+Johannesburg.
+
+==================================================
+4. GUEST ACCESS CONTROL
+=======================
+
+ACL Name: DBN-GUEST-FILTER
+Applied inbound to GigabitEthernet0/0.160
+
+Purpose:
+Restricts guest access to specified internal networks,
+including Johannesburg, Durban staff and IT, and Cape Town.
+
+DHCP requests are permitted by the configured ACL.
+Other traffic is handled according to the configured rules.
+
+==================================================
+5. SSH SECURITY
+===============
+
+SSH Version: 2
+Local username: netadmin
+VTY login: login local
+Permitted remote transport: SSH only
+
+==================================================
+6. LOGIN WARNING BANNER
+=======================
+
+WARNING: Authorised access only.
+Unauthorised access is prohibited.
+
+VERIFICATION COMMANDS — R2 DURBAN
+
+1. Check interface status and IP addresses:
+show ip interface brief
+
+2. Check DHCP pools:
+show ip dhcp pool
+
+3. Check assigned DHCP addresses:
+show ip dhcp binding
+
+4. Check OSPF neighbours:
+show ip ospf neighbor
+
+5. Check learned routes:
+show ip route ospf
+
+6. Check guest security ACL:
+show access-lists DBN-GUEST-FILTER
+
+7. Check SSH status:
+show ip ssh
+
+8. Test connectivity:
+ping 10.255.0.1
+ping 10.10.20.1
+ping 10.30.210.1
+

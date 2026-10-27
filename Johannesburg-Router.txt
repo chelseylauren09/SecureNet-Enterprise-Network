@@ -1,0 +1,168 @@
+SECURENET SOLUTIONS
+MULTI-BRANCH ENTERPRISE NETWORK
+
+Device: R1-JOHANNESBURG
+Platform: Cisco 2911 Router
+Role: Johannesburg Branch Router
+
+==================================================
+
+1. VLAN GATEWAYS AND INTERFACES
+   ==================================================
+
+Interface: GigabitEthernet0/0.10
+VLAN: 10 - MANAGEMENT
+Gateway: 10.10.10.1/24
+
+Interface: GigabitEthernet0/0.20
+VLAN: 20 - FINANCE
+Gateway: 10.10.20.1/24
+
+Interface: GigabitEthernet0/0.30
+VLAN: 30 - HR
+Gateway: 10.10.30.1/24
+
+Interface: GigabitEthernet0/0.40
+VLAN: 40 - IT
+Gateway: 10.10.40.1/24
+
+Interface: GigabitEthernet0/0.50
+VLAN: 50 - SERVERS
+Gateway: 10.10.50.1/24
+
+Interface: GigabitEthernet0/0.60
+VLAN: 60 - GUEST
+Gateway: 10.10.60.1/24
+
+Interface: GigabitEthernet0/0.99
+VLAN: 99 - NET-MGMT
+Gateway: 10.10.99.1/24
+
+Internet Edge connection:
+GigabitEthernet0/1: 172.16.0.1/30
+
+WAN connection to Durban:
+Serial0/3/0: 10.255.0.1/30
+
+WAN connection to Cape Town:
+Serial0/3/1: 10.255.0.5/30
+
+==================================================
+2. DHCP CONFIGURATION
+=====================
+
+JHB-FINANCE
+Network: 10.10.20.0/24
+Gateway: 10.10.20.1
+
+JHB-HR
+Network: 10.10.30.0/24
+Gateway: 10.10.30.1
+
+JHB-IT
+Network: 10.10.40.0/24
+Gateway: 10.10.40.1
+
+JHB-MANAGEMENT
+Network: 10.10.10.0/24
+Gateway: 10.10.10.1
+
+JHB-GUEST
+Network: 10.10.60.0/24
+Gateway: 10.10.60.1
+
+Excluded addresses:
+10.10.x.1 to 10.10.x.9 for the configured DHCP pools.
+
+DNS configured in DHCP pools: 8.8.8.8
+
+==================================================
+3. OSPF ROUTING
+===============
+
+OSPF Process ID: 1
+Router ID: 1.1.1.1
+Area: 0
+
+Advertised networks:
+10.10.10.0/24
+10.10.20.0/24
+10.10.30.0/24
+10.10.40.0/24
+10.10.50.0/24
+10.10.60.0/24
+10.10.99.0/24
+10.255.0.0/30
+10.255.0.4/30
+
+Default route:
+Next hop: 172.16.0.2
+
+Default route advertisement:
+default-information originate
+
+==================================================
+4. GUEST ACCESS CONTROL
+=======================
+
+ACL Name: JHB-GUEST-FILTER
+Applied inbound to GigabitEthernet0/0.60
+
+Purpose:
+Restricts guest network access to internal departmental,
+server, management and other branch networks.
+
+The ACL permits DHCP requests, denies specified internal
+destinations and permits other traffic according to the
+configured rules.
+
+==================================================
+5. SSH SECURITY
+===============
+
+SSH Version: 2
+Local username: netadmin
+VTY login: login local
+Permitted remote transport: SSH only
+
+==================================================
+6. LOGIN WARNING BANNER
+=======================
+
+WARNING: Authorised access only.
+Unauthorised access is prohibited.
+
+
+VERIFICATION COMMANDS — R1 JOHANNESBURG
+
+1. Check interface status and IP addresses:
+show ip interface brief
+
+2. Check VLAN gateway subinterfaces:
+show running-config
+
+3. Check DHCP pools:
+show ip dhcp pool
+
+4. Check assigned DHCP addresses:
+show ip dhcp binding
+
+5. Check OSPF neighbours:
+show ip ospf neighbor
+
+6. Check learned routes:
+show ip route ospf
+
+7. Check guest security ACL:
+show access-lists JHB-GUEST-FILTER
+
+8. Check SSH status:
+show ip ssh
+
+9. Check login and SSH settings:
+show running-config
+
+10. Test connectivity:
+ping 10.20.10.1
+ping 10.30.210.1
+ping 10.10.50.20
