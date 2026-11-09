@@ -1,4 +1,5 @@
 # SecureNet Solutions — Multi-Branch Enterprise Network
+<img width="749" height="329" alt="image" src="https://github.com/user-attachments/assets/1cccbcc5-4813-4553-b4f0-9d621f7fef25" />
 
 ## Project Overview
 
